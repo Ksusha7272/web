@@ -1,0 +1,11 @@
+ctrl+ shirt+p
+
+Git: Clone
+
+https://github.com/Ksusha7272/web.git
+
+venv/Scripts/activate
+
+pip install django
+
+python manage.py runserver
