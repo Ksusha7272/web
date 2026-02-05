@@ -19,14 +19,22 @@ from .models import Asset # Импортируем модель, чтобы сп
 #     }
 #     return render(request, 'gallery/index.html', context_data)
 def home(request):
-    # ORM Запрос: "Дай мне все объекты Asset из базы"
-    assets = Asset.objects.all() 
+    # all() возвращает хаос.
+    # order_by('-created_at') сортирует по полю created_at.
+    # Минус (-) означает "по убыванию" (DESC).
+    assets = Asset.objects.all().order_by('-created_at')
     context_data = {
     'page_title': 'Главная Галерея',
-    'assets': assets, # Передаем реальный QuerySet (список)
+    'assets': assets,
     }
     return render(request, 'gallery/index.html', context_data)
+
 def about(request):
 # Мы пока не используем HTML-шаблоны, просто вернем строку.
     #return HttpResponse("<h1>Курс Web Структуры.</p>")
     return render(request, 'gallery/about.html')
+
+def upload(request):
+# Мы пока не используем HTML-шаблоны, просто вернем строку.
+    #return HttpResponse("<h1>Курс Web Структуры.</p>")
+    return render(request, 'gallery/upload.html')
