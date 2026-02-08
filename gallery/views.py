@@ -1,23 +1,11 @@
 
 from django.http import HttpResponse
 
-from django.shortcuts import render
 from .models import Asset # Импортируем модель, чтобы спрашивать данные
+from django.shortcuts import render, redirect # Добавляем redirect
+from .forms import AssetForm # Импортируем нашу новую форму
 
-# HttpResponse нам больше не нужен, render делает это за нас
-# def home(request):
-#     # Имитация данных из базы (список словарей)
-#     fake_database = [
-#         {'id': 1, 'name': 'Sci-Fi Helmet', 'file_size': '15 MB'},
-#         {'id': 2, 'name': 'Old Chair', 'file_size': '2 MB'},
-#         {'id': 3, 'name': 'Cyber Truck', 'file_size': '10 MB'},
-#         {'id': 4, 'name': 'Table', 'file_size': '7 MB'},
-#     ]
-#     context_data = {
-#         'page_title': 'Главная Галерея',
-#         'assets': fake_database, # Передаем весь список
-#     }
-#     return render(request, 'gallery/index.html', context_data)
+
 def home(request):
     # all() возвращает хаос.
     # order_by('-created_at') сортирует по полю created_at.
@@ -30,11 +18,33 @@ def home(request):
     return render(request, 'gallery/index.html', context_data)
 
 def about(request):
-# Мы пока не используем HTML-шаблоны, просто вернем строку.
-    #return HttpResponse("<h1>Курс Web Структуры.</p>")
     return render(request, 'gallery/about.html')
 
 def upload(request):
-# Мы пока не используем HTML-шаблоны, просто вернем строку.
-    #return HttpResponse("<h1>Курс Web Структуры.</p>")
-    return render(request, 'gallery/upload.html')
+    if request.method == 'POST':
+        # Сценарий: Пользователь нажал "Отправить"
+        form = AssetForm(request.POST, request.FILES)
+        
+        if form.is_valid():
+            # Если все поля заполнены верно - сохраняем в БД
+            form.save()
+            # Показываем сообщение об успехе
+            context = {
+                'form': AssetForm(),  # Создаем новую пустую форму
+                'success_message': 'Спасибо, файл загружен!'
+            }
+            return render(request, 'gallery/upload.html', context)
+        else:
+            # Форма невалидна, показываем ошибки
+            context = {
+                'form': form,  # Форма с ошибками
+                'success_message': None  # Сообщение об успехе не показываем
+            }
+            return render(request, 'gallery/upload.html', context)
+    else:
+        # Сценарий: Пользователь просто зашел на страницу (GET)
+        context = {
+            'form': AssetForm(),
+            'success_message': None
+        }
+        return render(request, 'gallery/upload.html', context)

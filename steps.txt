@@ -4,7 +4,7 @@ Git: Clone
 
 https://github.com/Ksusha7272/web.git
 
-venv/Scripts/activate
+venv\Scripts\activate
 
 pip install django
 

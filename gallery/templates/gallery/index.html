@@ -1,36 +1,62 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <title>3D Storage</title>
+    <link rel="stylesheet" href="{% static 'gallery/style.css' %}">
 </head>
 <body>
     <header>
-        <!-- {{ ... }} — это переменная. Мы передадим её из Python -->
-        <h1>{{ page_title }}</h1>
+         <h1>{{ page_title }}</h1>
+        <!-- Ссылка на загрузку теперь выглядит как кнопка -->
+        <a href="{% url 'upload' %}" class="btn" style="background-color: #28a745;">+ 
+Загрузить модель</a>
     </header>
     <main>
-        <a href="/upload/" >Загрузить модель</a>
-        <h2>Доступные ассеты:</h2>
-        <!-- Цикл for в шаблоне Django -->
-        <ul>
+        <!-- Контейнер сетки -->
+        <div class="gallery-grid">
+            
             {% for asset in assets %}
-                <li>
-                    <strong>{{ asset.title }}</strong>
-                    <!-- asset.file.url — это ссылка на файл (/media/3d_assets/...) -->
-                    <!-- asset.file.size — размер в байтах. filter 'filesizeformat' делает его читаемым 
-                    (MB/KB) -->
-                    <small>(Размер: {{ asset.file.size|filesizeformat }})</small>
-                    <a href="{{ asset.file.url }}" download>[Скачать файл]</a>
-                    <!-- <strong>{{ asset.name }}</strong>  -->
-                    <!-- <small>(Размер: {{ asset.file_size }})</small> -->
-                    <!-- Ссылка-заглушка -->
-                    <!-- <a href="#">[Скачать]</a> -->
-                </li>
+                <!-- Карточка -->
+                <div class="asset-card">
+                    
+                    <!-- 1. Превью (Верхняя часть) -->
+                    <!-- Пока здесь просто серый квадрат с иконкой куба -->
+                    <!-- На 6-й неделе здесь будет картинка, на 5-й - 3D сцена -->
+                     <div class="card-preview">
+                        <!-- Добавляем ID и data-url.
+                        id="model-container-..." нужен, чтобы JS нашел конкретный div.
+                        data-url="..." хранит ссылку на файл, которую JS прочитает.-->
+                        <div class="card-preview" 
+                        id="model-container-{{ asset.id }}"
+                        data-url="{{ asset.file.url }}">
+🎲
+                    </div>
+                    </div>
+                    <!-- 2. Информация (Нижняя часть) -->
+                    <div class="card-info">
+                        <h3 class="card-title">{{ asset.title }}</h3>
+                        
+                        <div class="card-meta">
+                            <span>📅{{ asset.created_at|date:"d M Y" }}</span>
+                            <!-- Если есть файл, показываем размер -->
+                            {% if asset.file %}
+                                <span style="float: right;">💾{{ asset.file.size|filesizeformat }}</span>
+                            {% endif %}
+                        </div>
+                        <!-- Кнопка скачивания -->
+                        {% if asset.file %}
+                            <a href="{{ asset.file.url }}" class="btn" download>Скачать.glb</a>
+                        {% else %}
+                            <span style="color: red;">Файл потерян</span>
+                        {% endif %}
+                    </div>
+                </div>
             {% empty %}
-                <!-- Этот блок сработает, если список assets пустой -->
-                <li>Нет доступных моделей.</li>
+                <p>База пуста.</p>
             {% endfor %}
+        </div>
         </ul>
         <a href="/about/">О нас</a>
     </main>
