@@ -4,6 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <title>3D Storage</title>
+    <!-- ... ваши старые теги ... -->
+    <!-- ВАЖНО: Это карта, указывающая браузеру, где брать библиотеки -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+    <!-- Подключение CSS (оставьте как было) -->
+    {% load static %}
     <link rel="stylesheet" href="{% static 'gallery/style.css' %}">
 </head>
 <body>
@@ -29,10 +41,9 @@
                         id="model-container-..." нужен, чтобы JS нашел конкретный div.
                         data-url="..." хранит ссылку на файл, которую JS прочитает.-->
                         <div class="card-preview" 
-                        id="model-container-{{ asset.id }}"
-                        data-url="{{ asset.file.url }}">
-🎲
-                    </div>
+                            id="model-container-{{ asset.id }}"
+                            data-url="{{ asset.file.url }}">🎲
+                        </div>
                     </div>
                     <!-- 2. Информация (Нижняя часть) -->
                     <div class="card-info">
@@ -63,5 +74,20 @@
     <footer>
         <p>&copy; 2024 Web Structures Course</p>
     </footer>
+    <script type="module">
+        // Импортируем нашу функцию. 
+        // Обратите внимание: путь к JS через static
+        import { mountSimpleCube } from "{% static 'gallery/js/viewer.js' %}";
+        // Находим все контейнеры карточек
+        const containers = document.querySelectorAll('.card-preview');
+        if (containers.length > 0) {
+        // Берем только первый контейнер для теста
+            const firstContainer = containers[1];
+            // Получаем его ID (мы задали его на прошлой неделе: model-container-{{ asset.id }})
+            const containerId = firstContainer.id;
+            // Запускаем магию
+            mountSimpleCube(containerId);
+        }
+    </script>
 </body>
 </html>
