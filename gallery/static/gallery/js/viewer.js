@@ -13,6 +13,13 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js'
 export function loadModel(containerId, modelUrl) {
     const container = document.getElementById(containerId);
     if (!container) return;
+
+        // Полностью убираем фоновые стили контейнера
+    //container.style.background = 'transparent';
+    //container.style.backgroundImage = 'none';
+    //container.style.backgroundColor = 'transparent';
+    //container.style.border = 'none'; // На случай, если есть визуальные рамки
+
     // 1. Стандартная настройка сцены (как в прошлый раз)
     const scene = new THREE.Scene();
     scene.background = null 
@@ -74,16 +81,30 @@ export function loadModel(containerId, modelUrl) {
     
     // --- 2. Обновляем вызов загрузчика --
     const loader = new GLTFLoader();
-    loader.load(modelUrl,(gltf) => {
+    loader.load(
+        modelUrl,
+        (gltf) => {
             const model = gltf.scene;
             fitCameraToObject(camera, model, controls);
             scene.add(model);
             
-            // Скрываем лоадер
-            loaderDiv.style.opacity = '0';
+            // МГНОВЕННО отключаем лоадер от событий + визуальное скрытие
+            Object.assign(loaderDiv.style, {
+                opacity: '0',
+                pointerEvents: 'none', // КРИТИЧНО: мгновенно возвращает события canvas
+                visibility: 'hidden'
+            });
+            
+            // Гарантированно удаляем через 300мс
             setTimeout(() => {
-                loaderDiv.remove(); // Удаляем из DOM через 0.3 сек
+                if (loaderDiv.parentNode === container) {
+                    container.removeChild(loaderDiv);
+                }
             }, 300);
+            
+            // Явно активируем события для canvas
+            renderer.domElement.style.pointerEvents = 'auto';
+            console.log('✅ Модель загружена. Canvas активен для управления.');
         },
         
         // B. ON PROGRESS (Прогресс)
@@ -125,6 +146,8 @@ export function loadModel(containerId, modelUrl) {
         renderer.setSize(container.clientWidth, container.clientHeight);
         
     });
+
+    
 }
 
 function fitCameraToObject(camera, object, controls) {

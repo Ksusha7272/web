@@ -74,34 +74,117 @@ header {
 
 /* Сам экран загрузки (поверх 3D) */
 .loader-overlay {
-position: absolute;
-top: 0; left: 0; right: 0; bottom: 0;
-background: rgba(255, 255, 255, 0.9); /* Полупрозрачный белый */
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-z-index: 10;
-transition: opacity 0.3s; /* Плавное исчезновение */
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(255, 255, 255, 0.9); /* Полупрозрачный белый */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: opacity 0.3s; /* Плавное исчезновение */
 }
 /* Полоска прогресса (фон) */
 .progress-bar {
-width: 60%;
-height: 6px;
-background: #e0e0e0;
-border-radius: 3px;
-overflow: hidden;
-margin-top: 10px;
+    width: 60%;
+    height: 6px;
+    background: #e0e0e0;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 10px;
 }
 /* Полоска прогресса (заполнение) */
 .progress-fill {
-width: 0%; /* Будем менять это через JS */
-height: 100%;
-background-color: #007bff; /* Синий цвет */
-transition: width 0.1s;
+    width: 0%; /* Будем менять это через JS */
+    height: 100%;
+    background-color: #007bff; /* Синий цвет */
+    transition: width 0.1s;
 }
 .error-msg {
-color: #dc3545;
-text-align: center;
-padding: 20px;
+    color: #dc3545;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Делаем контейнер relative, чтобы позиционировать кнопку Play по центру */
+.card-preview {
+    position: relative;
+    cursor: pointer;
+    background-size: cover;
+    background-position: center;
+}
+/* Затемнение картинки при наведении */
+.card-preview:hover::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.1);
+}
+/* Кнопка Play */
+.play-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Точная центровка */
+    width: 60px;
+    height: 60px;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+    border: 2px solid white;
+    color: white;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, background 0.2s;
+    z-index: 5; /* Чтобы была поверх картинки */
+}
+/* Эффект нажатия */
+.card-preview:hover .play-btn {
+    background: rgba(0, 123, 255, 0.8); /* Синий при наведении */
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+/* Панель инструментов */
+.toolbar {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap; /* Чтобы на мобильном переносилось */
+}
+.search-input {
+    flex-grow: 1; /* Занимает всё свободное место */
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+.sort-select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: white;
+    cursor: pointer;
+}
+.search-btn {
+    padding: 10px 25px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+.search-btn:hover {
+    background-color: #0056b3;
+}
+.reset-link {
+    color: #dc3545;
+    text-decoration: none;
+    font-size: 0.9rem;
 }
