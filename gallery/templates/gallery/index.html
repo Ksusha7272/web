@@ -19,6 +19,17 @@
     <link rel="stylesheet" href="{% static 'gallery/style.css' %}">
 </head>
 <body>
+    {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+                <!-- message.tags добавит класс 'success', 'error' или 'warning' -->
+                <div class="alert {{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
     <header>
          <h1>{{ page_title }}</h1>
         <!-- Ссылка на загрузку теперь выглядит как кнопка -->
@@ -54,10 +65,13 @@
         </form>
     </div>
     <main>
+        <!-- 1. Загружаем наш новый тег -->
+        {% load gallery_extras %}
+        <!-- 2. Сетка моделей (тут ничего не меняем, просто напоминание где мы) -->
         <!-- Контейнер сетки -->
         <div class="gallery-grid">
             
-            {% for asset in assets %}
+            {% for asset in page_obj %}
                 <!-- Карточка -->
                  
                 <div class="asset-card">
@@ -117,6 +131,25 @@
             </div>
             {% endfor %}
         </div>
+        <!-- 3. Блок Пагинации -->
+        <div class="pagination">
+            <span class="step-links">
+                
+                {% if page_obj.has_previous %}
+                    <!-- Используем наш тег: берем текущий request и меняем page на 1 -->
+                    <a href="?{% param_replace request page=1 %}">&laquo; Первая</a>
+                    <a href="?{% param_replace request page=page_obj.previous_page_number %}">Назад</a>
+                {% endif %}
+                <span class="current">
+                    Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+                </span>
+                {% if page_obj.has_next %}
+                    <a href="?{% param_replace request page=page_obj.next_page_number %}">Далее</a>
+                    <a href="?{% param_replace request page=page_obj.paginator.num_pages %}">Последняя &raquo;</a>
+                {% endif %}
+                
+            </span>
+        </div>
         </ul>
         <a href="/about/">О нас</a>
     </main>
@@ -147,6 +180,8 @@
                 const url = this.dataset.url;
                 
                 if (url) {
+                    
+                    console.log("🔍 URL модели:", url); // Перед вызовом loadModel
                     console.log("Загружаю 3D по требованию:", url);
                     loadModel(id, url);
                     

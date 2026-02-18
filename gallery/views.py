@@ -8,6 +8,8 @@ from django.shortcuts import render, redirect # Добавляем redirect
 from .forms import AssetForm # Импортируем нашу новую форму
 from django.db.models import Q # Импортируем Q-object для сложного поиска
 from django.utils import timezone
+from django.core.paginator import Paginator
+from django.contrib import messages
 
 def home(request):
      # 1. Получаем параметры из URL (GET-запроса)
@@ -32,10 +34,18 @@ def home(request):
     else:
         # По умолчанию (new) - свежие сверху
         assets = assets.order_by('-created_at')
-    # 5. Отдаем результат
+
+    # --- ПАГИНАЦИЯ (Новый код) --
+    # Режем список по 8 штук на страницу (для теста, чтобы быстрее увидеть кнопки)
+    paginator = Paginator(assets, 8) 
+    # Получаем номер страницы из URL (например, ?page=2)
+    page_number = request.GET.get('page')
+    # Получаем конкретный кусочек данных (объект Page)
+    page_obj = paginator.get_page(page_number)
     context_data = {
         'page_title': 'Главная Галерея',
-        'assets': assets,
+        # 'assets': assets,  <-- ЭТУ СТРОКУ УДАЛИТЬ!
+        'page_obj': page_obj, # <-- ВМЕСТО НЕЁ ЭТУ
     }
     return render(request, 'gallery/index.html', context_data)
 
@@ -71,6 +81,9 @@ def upload(request):
             # 3. Финальное сохранение в БД
             new_asset.save()
             
+            # ДОБАВЛЯЕМ СООБЩЕНИЕ
+            messages.success(request, f'Модель "{new_asset.title}" успешно загружена!')
+
             return redirect('home')
     else:
         form = AssetForm()

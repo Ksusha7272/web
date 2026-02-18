@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 # Импортируем нашу функцию из приложения gallery
 from gallery.views import home
 from gallery.views import about
@@ -13,9 +13,8 @@ urlpatterns = [
     path('about/', about, name="about"),
     path('upload/', upload, name="upload"),
 ]
-# ВНИМАНИЕ: Эта магия работает только если DEBUG = True (режим разработки)
+# ЭТА СТРОКА КРИТИЧНО ВАЖНА для раздачи медиа в разработке
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
 
 
