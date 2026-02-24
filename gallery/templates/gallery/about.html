@@ -1,19 +1,45 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>О нас</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>О проекте</title>
+    <link rel="stylesheet" href="{% static 'gallery/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <!-- {{ ... }} — это переменная. Мы передадим её из Python -->
-        <h1>О проекте</h1>
+    <header style="text-align: center; padding: 40px 20px;">
+        <h1 style="background: var(--solana-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 10px;">
+            О проекте
+        </h1>
+        <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto;">
+            Платформа для хранения и просмотра 3D-моделей в формате glTF/GLB
+        </p>
     </header>
-    <main>
-        <h2>Ксюша</h2>
+
+    <main style="max-width: 800px; margin: 0 auto; padding: 0 20px 40px;">
+        <div style="background: var(--bg-card); border-radius: 12px; padding: 30px; border: 1px solid var(--border-color); margin-bottom: 25px;">
+            <h2 style="color: var(--solana-teal); margin-top: 0;">👋 Ксюша</h2>
+            <p style="color: var(--text-secondary); line-height: 1.6;">
+                Привет! Я разработчик этого проекта. Здесь вы можете загружать, хранить и просматривать свои 3D-модели прямо в браузере.
+            </p>
+        </div>
+
+        <div style="background: var(--bg-card); border-radius: 12px; padding: 30px; border: 1px solid var(--border-color);">
+            <h3 style="margin-top: 0; color: var(--text-primary);">✨ Особенности</h3>
+            <ul style="color: var(--text-secondary); line-height: 1.8; padding-left: 20px;">
+                <li>🖼️ Авто-генерация превью для 3D-моделей</li>
+                <li>🔍 Поиск и сортировка по дате, имени</li>
+                <li>🖱️ Интерактивный просмотр: вращайте модель мышкой</li>
+                <li>⚡ Быстрая загрузка и скачивание файлов</li>
+            </ul>
+        </div>
     </main>
-    <footer>
+
+    <footer style="text-align: center; padding: 30px; color: var(--text-secondary); border-top: 1px solid var(--border-color);">
         <p>&copy; 2024 Web Structures Course</p>
+        <a href="{% url 'home' %}" class="btn-back" style="display: inline-block; margin-top: 15px;">← Назад в галерею</a>
     </footer>
 </body>
 </html>

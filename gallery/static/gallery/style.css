@@ -1,250 +1,605 @@
-/* Базовый сброс и шрифт */
+/* === SOLANA DESIGN SYSTEM === */
+:root {
+    --solana-purple: #9945FF;
+    --solana-teal: #14F195;
+    --solana-gradient: linear-gradient(135deg, #9945FF 0%, #14F195 100%);
+    --bg-dark: #0a0a0a;
+    --bg-card: #151515;
+    --bg-secondary: #1C1C1C;
+    --text-primary: #FFFFFF;
+    --text-secondary: #A0A0A0;
+    --border-color: rgba(153, 69, 255, 0.2);
+}
+
+/* ===== ГЛАВНАЯ СТРАНИЦА (ГАЛЕРЕЯ) ===== */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f5f5f5; /* Светло-серый фон */
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg-dark);
+    background-image: 
+        radial-gradient(circle at 20% 30%, rgba(153, 69, 255, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(20, 241, 149, 0.1) 0%, transparent 50%);
     margin: 0;
     padding: 20px;
+    color: var(--text-primary);
+    min-height: 100vh;
 }
-header {
-    margin-bottom: 40px;
+
+/* Заголовок */
+header h1 {
     text-align: center;
+    font-size: 2.5rem;
+    margin: 0 0 20px 0;
+    background: var(--solana-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
-/* --- СЕТКА (GRID) --- */
+
+/* Кнопка загрузки - ИСПРАВЛЕНО: не растягивается */
+.btn-upload {
+    display: inline-block;
+    width: auto; /* ИСПРАВЛЕНО: не на всю ширину */
+    margin: 0 auto 30px auto;
+    padding: 10px 24px;
+    background: var(--solana-gradient);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(153, 69, 255, 0.3);
+}
+
+.btn-upload:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(153, 69, 255, 0.5);
+}
+
+/* Панель поиска */
+.toolbar {
+    background: var(--bg-secondary);
+    padding: 15px 20px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 30px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.search-input {
+    flex-grow: 1;
+    padding: 10px 15px;
+    background: var(--bg-card);
+    border: 1px solid rgba(153, 69, 255, 0.2);
+    border-radius: 6px;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+}
+
+.search-input::placeholder {
+    color: var(--text-secondary);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--solana-purple);
+    box-shadow: 0 0 0 2px rgba(153, 69, 255, 0.1);
+}
+
+.sort-select {
+    padding: 10px 15px;
+    background: var(--bg-card);
+    border: 1px solid rgba(20, 241, 149, 0.2);
+    border-radius: 6px;
+    color: var(--text-primary);
+    cursor: pointer;
+}
+
+.search-btn {
+    padding: 10px 24px;
+    background: var(--solana-gradient);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.search-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(153, 69, 255, 0.4);
+}
+
+/* Сетка галереи */
 .gallery-grid {
     display: grid;
-/* Это магическая строка адаптивности:
-Создавай столько колонок, сколько влезет (auto-fill).
-Минимальная ширина колонки 280px.
-Если места много - растягивай их (1fr). */
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 30px; /* Расстояние между карточками */
+    gap: 25px;
     max-width: 1200px;
     margin: 0 auto;
 }
-/* --- КАРТОЧКА (CARD) --- */
+
+/* Карточка */
 .asset-card {
-    background: white;
+    background: var(--bg-card);
     border-radius: 12px;
-    overflow: hidden; /* Чтобы содержимое не вылезало за скругленные углы */
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Легкая тень */
-    transition: transform 0.2s;
+    overflow: hidden;
+    border: 1px solid rgba(153, 69, 255, 0.1);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
 }
+
 .asset-card:hover {
-    transform: translateY(-5px); /* При наведении карточка чуть взлетает */
+    transform: translateY(-5px);
+    border-color: rgba(153, 69, 255, 0.3);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(153, 69, 255, 0.2);
 }
-/* Место для будущего 3D-вьювера или скриншота */
+
+/* Превью модели */
 .card-preview {
     width: 100%;
     height: 200px;
-    /*background-color: #e0e0e0;*/
-    background: radial-gradient(circle, #ffffff, #e0e0e0);
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #888;
-    font-size: 3rem;
-    position: relative; /* Контейнер теперь должен быть relative, чтобы мы могли позиционировать загрузчик внутри */
-}
-.card-info {
-    padding: 20px;
-}
-.card-title {
-    margin: 0 0 10px 0;
-    font-size: 1.2rem;
-    color: #333;
-}
-.card-meta {
-    font-size: 0.9rem;
-    color: #777;
-    margin-bottom: 15px;
-}
-/* Кнопка */
-.btn {
-    display: inline-block;
-    text-decoration: none;
-    background-color: #007bff;
-    color: white;
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-size: 0.9rem;
-}
-.btn:hover {
-    background-color: #0056b3;
-}
-
-/* Сам экран загрузки (поверх 3D) */
-.loader-overlay {
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(255, 255, 255, 0.9); /* Полупрозрачный белый */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-    transition: opacity 0.3s; /* Плавное исчезновение */
-}
-/* Полоска прогресса (фон) */
-.progress-bar {
-    width: 60%;
-    height: 6px;
-    background: #e0e0e0;
-    border-radius: 3px;
-    overflow: hidden;
-    margin-top: 10px;
-}
-/* Полоска прогресса (заполнение) */
-.progress-fill {
-    width: 0%; /* Будем менять это через JS */
-    height: 100%;
-    background-color: #007bff; /* Синий цвет */
-    transition: width 0.1s;
-}
-.error-msg {
-    color: #dc3545;
-    text-align: center;
-    padding: 20px;
-}
-
-/* Делаем контейнер relative, чтобы позиционировать кнопку Play по центру */
-.card-preview {
     position: relative;
     cursor: pointer;
-    background-size: cover;
-    background-position: center;
+    overflow: hidden;
 }
-/* Затемнение картинки при наведении */
-.card-preview:hover::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.1);
-    pointer-events: none;
-}
+
 /* Кнопка Play */
 .play-btn {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%); /* Точная центровка */
+    transform: translate(-50%, -50%);
     width: 60px;
     height: 60px;
-    background: rgba(0, 0, 0, 0.6);
+    background: var(--solana-gradient);
     border-radius: 50%;
-    border: 2px solid white;
+    border: 3px solid rgba(255, 255, 255, 0.9);
     color: white;
     font-size: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.2s, background 0.2s;
-    z-index: 5; /* Чтобы была поверх картинки */
-    pointer-events: none;
+    transition: all 0.3s ease;
+    z-index: 5;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
-/* Эффект нажатия */
+
 .card-preview:hover .play-btn {
-    background: rgba(0, 123, 255, 0.8); /* Синий при наведении */
     transform: translate(-50%, -50%) scale(1.1);
+    box-shadow: 0 6px 30px rgba(153, 69, 255, 0.6);
 }
 
-/* Панель инструментов */
-.toolbar {
-    background: white;
+/* Инфо о модели */
+.card-info {
     padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    margin-bottom: 30px;
-    display: flex;
-    gap: 15px;
-    align-items: center;
-    flex-wrap: wrap; /* Чтобы на мобильном переносилось */
-}
-.search-input {
-    flex-grow: 1; /* Занимает всё свободное место */
-    padding: 10px 15px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 1rem;
-}
-.sort-select {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    background: white;
-    cursor: pointer;
-}
-.search-btn {
-    padding: 10px 25px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1rem;
-}
-.search-btn:hover {
-    background-color: #0056b3;
-}
-.reset-link {
-    color: #dc3545;
-    text-decoration: none;
-    font-size: 0.9rem;
-}
-
-.pagination {
-    margin-top: 40px;
-    text-align: center;
-    padding: 20px;
-}
-.pagination a {
-    display: inline-block;
-    padding: 8px 16px;
-    margin: 0 5px;
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    text-decoration: none;
-    color: #333;
-}
-.pagination a:hover {
-    background: #f0f0f0;
-}
-
-.pagination .current {
-    font-weight: bold;
-    margin: 0 10px;
-}
-
-.messages-container {
-position: fixed;
-top: 20px;
-right: 20px;
-z-index: 1000;
-width: 300px;
-}
-.alert {
-padding: 15px;
-margin-bottom: 10px;
-border-radius: 4px;
-color: white;
-box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-animation: slideIn 0.5s ease-out;
-}
-.alert.success { background-color: #28a745; } /* Зеленый */
-.alert.error { background-color: #dc3545; }   /* Красный */
-.alert.warning { background-color: #ffc107; color: black; } /* Желтый */
-@keyframes slideIn {
-from { transform: translateX(100%); opacity: 0; }
-to { transform: translateX(0); opacity: 1; }
 }
 
 .card-title {
-/* Старые стили оставьте... */
-margin: 0 0 10px 0;
-font-size: 1.2rem;
-color: #333;
-/* Новые стили обрезки */
-white-space: nowrap; /* Запрет переноса на новую строку */
-overflow: hidden;   /* Скрыть хвост */
-text-overflow: ellipsis;  /* Добавить троеточие (...) */
+    margin: 0 0 10px 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-meta {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 15px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+/* Кнопка скачать - ИСПРАВЛЕНО: выравнивание */
+.btn-download {
+    display: block; /* ИСПРАВЛЕНО: блочный элемент */
+    width: 100%;
+    padding: 10px;
+    background: transparent;
+    color: var(--solana-teal);
+    border: 2px solid var(--solana-teal);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center; /* ИСПРАВЛЕНО: центрирование текста */
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-sizing: border-box; /* ИСПРАВЛЕНО: учет padding в ширине */
+}
+
+.btn-download:hover {
+    background: var(--solana-teal);
+    color: var(--bg-dark);
+    box-shadow: 0 4px 15px rgba(20, 241, 149, 0.4);
+}
+
+/* Пагинация */
+.pagination {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.pagination .current {
+    display: inline-block;
+    padding: 8px 20px;
+    background: var(--solana-gradient);
+    color: white;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+/* ===== СТРАНИЦА ЗАГРУЗКИ ===== */
+.upload-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 40px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+
+.upload-container h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    background: var(--solana-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.form-group input[type="text"],
+.form-group input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    background: var(--bg-card);
+    border: 1px solid rgba(153, 69, 255, 0.2);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    box-sizing: border-box;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--solana-purple);
+    box-shadow: 0 0 0 2px rgba(153, 69, 255, 0.1);
+}
+
+.preview-box {
+    width: 100%;
+    height: 300px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    margin-top: 10px;
+}
+
+/* Кнопки формы */
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.btn-submit {
+    flex: 0 0 auto; /* ИСПРАВЛЕНО: не растягивается */
+    padding: 12px 30px;
+    background: var(--solana-gradient);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(153, 69, 255, 0.5);
+}
+
+.btn-back {
+    display: inline-block;
+    padding: 12px 20px;
+    color: var(--solana-teal);
+    text-decoration: none;
+    border: 1px solid var(--solana-teal);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.btn-back:hover {
+    background: var(--solana-teal);
+    color: var(--bg-dark);
+}
+
+/* Loader */
+.loader-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(10, 10, 10, 0.95);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.progress-bar {
+    width: 70%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 15px;
+}
+
+.progress-fill {
+    width: 0%;
+    height: 100%;
+    background: var(--solana-gradient);
+    transition: width 0.1s;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .toolbar {
+        flex-direction: column;
+    }
+    
+    .search-input,
+    .sort-select,
+    .search-btn {
+        width: 100%;
+    }
+}
+/* ===== УЛУЧШЕННЫЕ КНОПКИ ===== */
+
+/* Кнопка ЗАГРУЗИТЬ МОДЕЛЬ */
+.btn-upload {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 28px;
+    background: linear-gradient(135deg, #9945FF 0%, #14F195 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(153, 69, 255, 0.4);
+    z-index: 1;
+}
+
+.btn-upload::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+    z-index: -1;
+}
+
+.btn-upload:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(153, 69, 255, 0.6), 0 0 40px rgba(20, 241, 149, 0.3);
+}
+
+.btn-upload:hover::before {
+    left: 100%;
+}
+
+.btn-upload:active {
+    transform: translateY(-1px);
+}
+
+/* Иконка плюс для кнопки загрузки */
+.btn-upload::after {
+    content: '+';
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-left: 4px;
+}
+
+/* Кнопка СКАЧАТЬ */
+.btn-download {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px 20px;
+    background: transparent;
+    color: var(--solana-teal);
+    border: 2px solid var(--solana-teal);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-sizing: border-box;
+    z-index: 1;
+}
+
+.btn-download::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: linear-gradient(135deg, #14F195 0%, #9945FF 100%);
+    transition: width 0.3s ease;
+    z-index: -1;
+}
+
+.btn-download:hover {
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 6px 20px rgba(20, 241, 149, 0.4);
+    transform: translateY(-2px);
+}
+
+.btn-download:hover::before {
+    width: 100%;
+}
+
+.btn-download:active {
+    transform: translateY(0);
+}
+
+/* Иконка стрелки вниз для кнопки скачать */
+.btn-download::after {
+    content: '↓';
+    font-size: 1rem;
+    font-weight: 700;
+    transition: transform 0.3s ease;
+}
+
+.btn-download:hover::after {
+    transform: translateY(2px);
+}
+
+/* Альтернативный вариант кнопки СКАЧАТЬ (сплошной градиент) */
+.btn-download-solid {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #14F195 0%, #9945FF 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(20, 241, 149, 0.3);
+    box-sizing: border-box;
+}
+
+.btn-download-solid::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-download-solid:hover {
+    box-shadow: 0 8px 25px rgba(20, 241, 149, 0.5), 0 0 30px rgba(153, 69, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.btn-download-solid:hover::before {
+    left: 100%;
+}
+
+/* Glow эффект при наведении */
+.btn-glow {
+    position: relative;
+}
+
+.btn-glow::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(135deg, #9945FF, #14F195, #9945FF);
+    border-radius: 10px;
+    opacity: 0;
+    z-index: -1;
+    filter: blur(8px);
+    transition: opacity 0.3s ease;
+}
+
+.btn-glow:hover::after {
+    opacity: 0.6;
+}
+
+/* Анимация пульсации для привлечения внимания */
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 4px 15px rgba(153, 69, 255, 0.4);
+    }
+    50% {
+        box-shadow: 0 4px 25px rgba(153, 69, 255, 0.7), 0 0 30px rgba(20, 241, 149, 0.4);
+    }
+}
+
+.btn-pulse {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* Responsive для кнопок */
+@media (max-width: 768px) {
+    .btn-upload,
+    .btn-download,
+    .btn-download-solid {
+        padding: 10px 20px;
+        font-size: 0.85rem;
+    }
 }

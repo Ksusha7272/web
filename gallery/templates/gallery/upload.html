@@ -1,49 +1,12 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Загрузка модели</title>
-    <!-- Простой CSS для наглядности (пока без внешних файлов) -->
-    <style>
-        body { font-family: sans-serif; max-width: 600px; margin: 2rem auto; padding: 0 1rem; }
-        .form-group { margin-bottom: 1rem; }
-        button { padding: 10px 20px; cursor: pointer; }
-    </style>
-</head>
-<body>
-    <h1>Загрузить новую 3D модель</h1>
-    <!-- 
-        1. method="post": Чтобы отправить данные.
-        2. enctype="multipart/form-data": ОБЯЗАТЕЛЬНО для файлов! 
-    -->
-    {% if success_message %}
-        <div style="background-color: #d4edda; padding: 10px; margin: 10px 0;">
-            ✅ {{ success_message }}
-        </div>
-    {% endif %}
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %} 
-        <div class="form-group">
-            {{ form.as_p }}
-        </div>
-        <!-- БЛОК ПРЕВЬЮ (Новый) -->
-        <div style="margin-bottom: 20px;">
-            <p>Авто-генерация превью:</p>
-            <!-- Сюда JS вставит Canvas с 3D моделью -->
-            <div id="preview-container" style="width: 300px; height: 200px; background: #eee; 
-            border: 1px solid #ccc;">
-                <span style="display: block; padding: 80px 0; text-align: center; color: 
-            #999;">Выберите файл...</span>
-            </div>
-        <!-- СКРЫТОЕ ПОЛЕ (Сюда JS запишет длинную строку base64) -->
-            <input type="hidden" name="image_data" id="id_image_data">
-        </div>
-        <!-- ... -->
-        <!-- Кнопка отправки (блокируем её, пока не сгенерируется картинка) -->
-        <button type="submit" id="submit-btn" disabled>Загрузить в базу</button>
-    </form>
-
-    {% load static %}
+    <link rel="stylesheet" href="{% static 'gallery/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script type="importmap">
     {
         "imports": {
@@ -52,10 +15,58 @@
         }
     }
     </script>
+</head>
+<body>
+    <header style="text-align: center; padding: 30px 20px;">
+        <h1 style="background: var(--solana-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin: 0;">
+            Загрузить 3D-модель
+        </h1>
+    </header>
+
+    <main style="max-width: 600px; margin: 0 auto; padding: 0 20px 40px;">
+        {% if success_message %}
+            <div style="background: rgba(20, 241, 149, 0.15); border: 1px solid var(--solana-teal); color: var(--solana-teal); padding: 15px; border-radius: 8px; margin-bottom: 25px; text-align: center;">
+                ✅ {{ success_message }}
+            </div>
+        {% endif %}
+
+        <div class="upload-container">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="id_title">Название модели</label>
+                    {{ form.title }}
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_file">Файл модели (.glb/.gltf)</label>
+                    {{ form.file }}
+                </div>
+
+                <!-- БЛОК ПРЕВЬЮ -->
+                <div class="form-group">
+                    <label>Превью (авто-генерация)</label>
+                    <div id="preview-container" class="preview-box">
+                        <span style="color: var(--text-secondary);">Выберите файл для генерации превью...</span>
+                    </div>
+                    <input type="hidden" name="image_data" id="id_image_data">
+                </div>
+
+                <div class="form-actions" style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                    <button type="submit" id="submit-btn" class="btn-submit" disabled>
+                        Загрузить в базу
+                    </button>
+                    <a href="{% url 'home' %}" class="btn-back">Отмена</a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer style="text-align: center; padding: 20px; color: var(--text-secondary);">
+        <p>&copy; 2024 Web Structures Course</p>
+    </footer>
+
     <script type="module" src="{% static 'gallery/js/autothumb.js' %}"></script>
-
-    <br>
-    <a href="{% url 'home' %}">← Назад в галерею</a>
 </body>
-
 </html>
